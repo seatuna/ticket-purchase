@@ -1,12 +1,13 @@
 import { useState, SyntheticEvent, ChangeEvent } from "react";
 import { InputAdornment, TextField } from "@mui/material";
 import CardIcon from "./assets/card.svg";
+import { containsOnlyNumbers, isFutureDate, isValidDate } from "./helpers";
 
 const defaultValues = {
-  name: undefined,
-  cardNumber: undefined,
-  securityCode: undefined,
-  expDate: undefined,
+  name: "",
+  cardNumber: "",
+  securityCode: "",
+  expDate: "",
 };
 
 export const PaymentForm = () => {
@@ -22,9 +23,82 @@ export const PaymentForm = () => {
     }));
   };
 
+  const validate = () => {
+    const { name, cardNumber, expDate, securityCode } = formValues;
+
+    // Validate name
+    if (name.length < 3) {
+      setErrors((prev) => ({
+        ...prev,
+        name: "Please enter your full name as it appears on the card",
+      }));
+    }
+
+    /**
+     * Validate card number
+     * 1. contains only numbers
+     * 2. is 12 digits long
+     */
+    if (!containsOnlyNumbers(cardNumber)) {
+      setErrors((prev) => ({
+        ...prev,
+        cardNumber:
+          "Please make sure your credit card number only contains numbers",
+      }));
+    }
+
+    if (cardNumber.length !== 12) {
+      setErrors((prev) => ({
+        ...prev,
+        cardNumber: "Please enter a 12 digit credit card number",
+      }));
+    }
+
+    /**
+     * Validate security code
+     * 1. contains only numbers
+     * 2. is 3 digits long
+     */
+    if (!containsOnlyNumbers(securityCode)) {
+      setErrors((prev) => ({
+        ...prev,
+        securityCode:
+          "Please make sure your security code only contains numbers",
+      }));
+    }
+    if (securityCode.length < 3) {
+      setErrors((prev) => ({
+        ...prev,
+        securityCode: "Please enter a 3 digit security code",
+      }));
+    }
+
+    /**
+     * Validate expiration date
+     * 1. is a date in the future
+     * 2. is in MM/YY format
+     */
+    if (!isFutureDate(expDate)) {
+      setErrors((prev) => ({
+        ...prev,
+        expDate: "Please enter a date in the future",
+      }));
+    }
+    if (!isValidDate(expDate)) {
+      setErrors((prev) => ({
+        ...prev,
+        expDate: "Please enter a valid date in MM/YY format",
+      }));
+    }
+
+    console.log(errors);
+  };
+
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
     console.log(formValues);
+    setErrors(defaultValues);
+    validate();
   };
 
   return (
@@ -42,8 +116,11 @@ export const PaymentForm = () => {
         value={formValues.name}
       />
       <TextField
+        error={Boolean(errors.cardNumber)}
         fullWidth
+        helperText={errors.cardNumber}
         id="card-input"
+        inputProps={{ maxLength: 12 }}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -55,10 +132,11 @@ export const PaymentForm = () => {
         name="cardNumber"
         onChange={handleChange}
         required
-        type="number"
         value={formValues.cardNumber}
       />
       <TextField
+        error={Boolean(errors.securityCode)}
+        helperText={errors.securityCode}
         id="securityCode-input"
         inputProps={{ maxLength: 3 }}
         label="Security Code"
@@ -70,8 +148,10 @@ export const PaymentForm = () => {
         value={formValues.securityCode}
       />
       <TextField
+        error={Boolean(errors.expDate)}
+        helperText={errors.expDate}
         id="expDate-input"
-        InputProps={{ maxLength: 5 }}
+        inputProps={{ maxLength: 5 }}
         label="Expiration Date"
         name="expDate"
         onChange={handleChange}
