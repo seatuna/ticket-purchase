@@ -1,12 +1,27 @@
 import "./App.css";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import { EventList } from "./EventList";
+import { Checkout } from "./Checkout";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <EventList />,
+  },
+  {
+    path: "/checkout/:eventId",
+    element: <Checkout />,
+  },
+]);
 
 function App() {
-  return (
-    <>
-      <EventList />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
