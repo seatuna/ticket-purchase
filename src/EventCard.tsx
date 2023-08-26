@@ -1,19 +1,19 @@
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
 import { Event } from "./mockData.ts";
 import { Link } from "react-router-dom";
 
 interface EventCardProps {
   event: Event;
-  orientation?: string;
 }
 
-export const EventCard = (props: EventCardProps) => {
-  const { event } = props;
+export const EventCard = ({ event }: EventCardProps) => {
   return (
     <Card sx={{ height: "100%", maxWidth: 350 }}>
       <CardMedia sx={{ height: 150 }} image={event.img} title={event.title} />
