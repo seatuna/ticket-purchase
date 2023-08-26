@@ -2,19 +2,16 @@ import { useState, SyntheticEvent, ChangeEvent } from "react";
 import { InputAdornment, TextField } from "@mui/material";
 import CardIcon from "./assets/card.svg";
 
-interface PaymentFormProps {
-  onSubmit?: () => void;
-}
-
 const defaultValues = {
-  name: "",
-  cardNumber: "",
-  securityCode: "",
-  expDate: "",
+  name: undefined,
+  cardNumber: undefined,
+  securityCode: undefined,
+  expDate: undefined,
 };
 
-export const PaymentForm = ({ onSubmit }: PaymentFormProps) => {
+export const PaymentForm = () => {
   const [formValues, setFormValues] = useState(defaultValues);
+  const [errors, setErrors] = useState(defaultValues);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const formField = event.target.name;
@@ -33,22 +30,20 @@ export const PaymentForm = ({ onSubmit }: PaymentFormProps) => {
   return (
     <form onSubmit={handleSubmit} id="payment-form">
       <TextField
-        id="name-input"
-        name="name"
-        label="Name"
-        type="text"
-        value={formValues.name}
+        error={Boolean(errors.name)}
         fullWidth
+        helperText={errors.name}
+        id="name-input"
+        label="Name"
+        name="name"
         onChange={handleChange}
         required
+        type="text"
+        value={formValues.name}
       />
       <TextField
-        id="card-input"
-        name="cardNumber"
-        label="Card Number"
-        type="text"
-        value={formValues.cardNumber}
         fullWidth
+        id="card-input"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -56,28 +51,34 @@ export const PaymentForm = ({ onSubmit }: PaymentFormProps) => {
             </InputAdornment>
           ),
         }}
+        label="Card Number"
+        name="cardNumber"
         onChange={handleChange}
         required
+        type="number"
+        value={formValues.cardNumber}
       />
       <TextField
         id="securityCode-input"
-        name="securityCode"
+        inputProps={{ maxLength: 3 }}
         label="Security Code"
+        name="securityCode"
+        onChange={handleChange}
+        required
+        sx={{ width: "50%" }}
         type="text"
         value={formValues.securityCode}
-        onChange={handleChange}
-        sx={{ width: "50%" }}
-        required
       />
       <TextField
         id="expDate-input"
-        name="expDate"
-        placeholder="MM/YY"
+        InputProps={{ maxLength: 5 }}
         label="Expiration Date"
+        name="expDate"
+        onChange={handleChange}
+        placeholder="MM/YY"
+        required
         type="text"
         value={formValues.expDate}
-        onChange={handleChange}
-        required
       />
     </form>
   );

@@ -9,7 +9,7 @@ export const EventList = () => {
       <Grid container spacing={2}>
         {events.map((event: Event) => {
           return (
-            <Grid item xs={10} sm={6} md={4}>
+            <Grid item xs={10} sm={6} md={4} key={event.id}>
               <EventCard event={event} />
             </Grid>
           );

@@ -18,12 +18,19 @@ export const EventCard = ({ event }: EventCardProps) => {
     <Card sx={{ height: "100%", maxWidth: 350 }}>
       <CardMedia sx={{ height: 150 }} image={event.img} title={event.title} />
       <CardContent sx={{ height: 120 }}>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h6" component="div">
           {event.title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {event.description}
-          <p>${event.price.toFixed(2)}</p>
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          textAlign="right"
+          padding={1}
+        >
+          ${event.price.toFixed(2)}
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: "flex-end" }}>

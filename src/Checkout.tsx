@@ -80,7 +80,7 @@ export const Checkout = () => {
           </Box>
           <Box sx={{ marginTop: "15px" }}>
             <Typography variant="h2" padding={2} textAlign="right">
-              {(Number(event.price) * quantity).toFixed(2)}
+              ${(Number(event.price) * quantity).toFixed(2)}
             </Typography>
             <Button
               variant="contained"
