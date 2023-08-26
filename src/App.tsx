@@ -1,9 +1,10 @@
 import "./App.css";
+import { EventList } from "./EventList";
 
 function App() {
   return (
     <>
-      <div>Hello</div>
+      <EventList />
     </>
   );
 }
