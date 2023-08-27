@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -24,14 +25,19 @@ export const EventCard = ({ event }: EventCardProps) => {
         <Typography variant="body2" color="text.secondary">
           {event.description}
         </Typography>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          textAlign="right"
-          padding={1}
-        >
-          ${event.price.toFixed(2)}
-        </Typography>
+        <Box display="flex" justifyContent="space-between">
+          <Typography variant="body2" color="text.secondary" paddingTop={1}>
+            {event.date.toLocaleDateString("en-US")}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            textAlign="right"
+            padding={1}
+          >
+            ${event.price.toFixed(2)}
+          </Typography>
+        </Box>
       </CardContent>
       <CardActions sx={{ justifyContent: "flex-end" }}>
         <Link to={`/checkout/${event.id}`}>

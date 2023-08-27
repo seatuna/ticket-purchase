@@ -2,6 +2,7 @@ export const processingFee = 4.00;
 
 export interface Event {
   artist: string;
+  date: Date;
   description: string;
   id: string;
   img: string;
@@ -18,6 +19,7 @@ export const events: Event[] = [
     img: '/src/assets/img/mochi-wind.jpeg',
     id: '1',
     description: 'My dog Mochi runs away on an unexpected adventure',
+    date: new Date(2023, 8, 12),
     artist: 'Mochi'
   },
   {
@@ -27,6 +29,7 @@ export const events: Event[] = [
     img: '/src/assets/img/bts-ly-concert.jpeg',
     id: '2',
     description: 'Theatrical viewing of BTS 2019 World Tour',
+    date: new Date(2023, 8, 7),
     artist: 'BTS'
   },
   {
@@ -36,6 +39,7 @@ export const events: Event[] = [
     img: '/src/assets/img/john-oliver.jpeg',
     id: '3',
     description: 'Watch John Oliver perform standup in Boston!',
+    date: new Date(2023, 9, 28),
     artist: 'John Oliver'
   },
   {
@@ -45,6 +49,7 @@ export const events: Event[] = [
     img: '/src/assets/img/digimon-movie.jpeg',
     id: '4',
     description: 'The prequel story of the hit anime series Digimon!',
+    date: new Date(2023, 9, 2),
     artist: 'Digimon'
   },
   {
@@ -54,6 +59,7 @@ export const events: Event[] = [
     img: '/src/assets/img/penguins.jpeg',
     id: '5',
     description: 'Watch these cute penguins do their daily routine',
+    date: new Date(2023, 9, 31),
     artist: 'IDK,NATGEO?'
   }
 ]

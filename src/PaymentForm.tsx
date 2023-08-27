@@ -12,20 +12,33 @@ interface PaymentFormProps {
   onSuccess: (message: string) => void;
 }
 
-const defaultValues = {
+interface PaymentFormValues {
+  name: string;
+  cardNumber: string;
+  securityCode: string;
+  expDate: string;
+}
+
+const defaultValues: PaymentFormValues = {
   name: "",
   cardNumber: "",
   securityCode: "",
   expDate: "",
 };
 
+const mockSendPayment = () =>
+  new Promise((resolve) => {
+    resolve("Success");
+  });
+
 export const PaymentForm = ({ onSuccess }: PaymentFormProps) => {
   const [formValues, setFormValues] = useState(defaultValues);
-  const [errors, setErrors] = useState(defaultValues);
+  const [formErrors, setFormErrors] =
+    useState<Partial<PaymentFormValues>>(defaultValues);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const formField = event.target.name;
-    const value = event.target.value;
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const formField = e.target.name;
+    const value = e.target.value;
     setFormValues((prev) => ({
       ...prev,
       [formField]: value,
@@ -34,13 +47,14 @@ export const PaymentForm = ({ onSuccess }: PaymentFormProps) => {
 
   const validate = () => {
     const { name, cardNumber, expDate, securityCode } = formValues;
+    let errors = {};
 
     // Validate name
     if (name.length < 3) {
-      setErrors((prev) => ({
-        ...prev,
+      errors = {
+        ...errors,
         name: "Please enter your full name as it appears on the card",
-      }));
+      };
     }
 
     /**
@@ -49,18 +63,18 @@ export const PaymentForm = ({ onSuccess }: PaymentFormProps) => {
      * 2. is 12 digits long
      */
     if (!containsOnlyNumbers(cardNumber)) {
-      setErrors((prev) => ({
-        ...prev,
+      errors = {
+        ...errors,
         cardNumber:
           "Please make sure your credit card number only contains numbers",
-      }));
+      };
     }
 
     if (cardNumber.length !== 12) {
-      setErrors((prev) => ({
-        ...prev,
+      errors = {
+        ...errors,
         cardNumber: "Please enter a 12 digit credit card number",
-      }));
+      };
     }
 
     /**
@@ -69,17 +83,17 @@ export const PaymentForm = ({ onSuccess }: PaymentFormProps) => {
      * 2. is 3 digits long
      */
     if (!containsOnlyNumbers(securityCode)) {
-      setErrors((prev) => ({
-        ...prev,
+      errors = {
+        ...errors,
         securityCode:
           "Please make sure your security code only contains numbers",
-      }));
+      };
     }
     if (securityCode.length < 3) {
-      setErrors((prev) => ({
-        ...prev,
+      errors = {
+        ...errors,
         securityCode: "Please enter a 3 digit security code",
-      }));
+      };
     }
 
     /**
@@ -88,40 +102,43 @@ export const PaymentForm = ({ onSuccess }: PaymentFormProps) => {
      * 2. is in MM/YY format
      */
     if (!isFutureDate(expDate)) {
-      setErrors((prev) => ({
-        ...prev,
+      errors = {
+        ...errors,
         expDate: "Please enter a date in the future",
-      }));
+      };
     }
 
     if (!isValidDate(expDate)) {
-      setErrors((prev) => ({
-        ...prev,
+      errors = {
+        ...errors,
         expDate: "Please enter a valid date in MM/YY format",
-      }));
+      };
     }
+
+    setFormErrors(errors);
+    return errors;
   };
 
-  const handleSubmit = (event: SyntheticEvent) => {
-    event.preventDefault();
-    console.log(formValues);
-    setErrors(defaultValues);
-    validate();
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    const errors = validate();
 
     if (!hasErrors(errors)) {
-      console.log("success line");
-      onSuccess("Congrats! You have successfully booked tickets!");
+      mockSendPayment().then(() => {
+        onSuccess("Congrats! You have successfully booked tickets!");
+      });
     }
   };
 
   return (
     <form onSubmit={handleSubmit} id="payment-form">
       <TextField
-        error={Boolean(errors.name)}
+        error={Boolean(formErrors.name)}
         fullWidth
-        helperText={errors.name}
+        helperText={formErrors.name}
         id="name-input"
         label="Name"
+        margin="normal"
         name="name"
         onChange={handleChange}
         required
@@ -129,9 +146,9 @@ export const PaymentForm = ({ onSuccess }: PaymentFormProps) => {
         value={formValues.name}
       />
       <TextField
-        error={Boolean(errors.cardNumber)}
+        error={Boolean(formErrors.cardNumber)}
         fullWidth
-        helperText={errors.cardNumber}
+        helperText={formErrors.cardNumber}
         id="card-input"
         inputProps={{ maxLength: 12 }}
         InputProps={{
@@ -142,34 +159,38 @@ export const PaymentForm = ({ onSuccess }: PaymentFormProps) => {
           ),
         }}
         label="Card Number"
+        margin="normal"
         name="cardNumber"
         onChange={handleChange}
         required
         value={formValues.cardNumber}
       />
       <TextField
-        error={Boolean(errors.securityCode)}
-        helperText={errors.securityCode}
+        error={Boolean(formErrors.securityCode)}
+        helperText={formErrors.securityCode}
         id="securityCode-input"
         inputProps={{ maxLength: 3 }}
         label="Security Code"
+        margin="normal"
         name="securityCode"
         onChange={handleChange}
         required
-        sx={{ width: "50%" }}
+        sx={{ width: "15ch" }}
         type="text"
         value={formValues.securityCode}
       />
       <TextField
-        error={Boolean(errors.expDate)}
-        helperText={errors.expDate}
+        error={Boolean(formErrors.expDate)}
+        helperText={formErrors.expDate}
         id="expDate-input"
         inputProps={{ maxLength: 5 }}
         label="Expiration Date"
+        margin="normal"
         name="expDate"
         onChange={handleChange}
         placeholder="MM/YY"
         required
+        sx={{ marginLeft: 2, width: "15ch" }}
         type="text"
         value={formValues.expDate}
       />
