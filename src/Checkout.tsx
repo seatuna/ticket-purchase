@@ -54,15 +54,7 @@ export const Checkout = () => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid
-              item
-              sm={6}
-              md={7}
-              sx={{
-                border: "1px solid gray",
-                padding: "15px",
-              }}
-            >
+            <Grid item sm={6} md={7} border="1px solid gray" padding={2}>
               <Typography variant="h5">Payment Details</Typography>
               <PaymentForm onSuccess={setSuccess} />
             </Grid>
@@ -100,7 +92,7 @@ export const Checkout = () => {
                   2
                 )} x ${quantity}) processing fee`}
               </Typography>
-              <Box sx={{ marginTop: "15px" }}>
+              <Box marginTop="15px">
                 <Typography variant="h2" padding={2} textAlign="right">
                   ${totalCost}
                 </Typography>

@@ -58,7 +58,7 @@ export const events: Event[] = [
     price: 15.98,
     img: '/src/assets/img/penguins.jpeg',
     id: '5',
-    description: 'Watch these cute penguins do their daily routine',
+    description: 'Watch these cute penguins do their daily routine this Halloween',
     date: new Date(2023, 9, 31),
     artist: 'IDK,NATGEO?'
   }
