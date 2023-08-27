@@ -1,7 +1,16 @@
 import { useState, SyntheticEvent, ChangeEvent } from "react";
 import { InputAdornment, TextField } from "@mui/material";
 import CardIcon from "./assets/card.svg";
-import { containsOnlyNumbers, isFutureDate, isValidDate } from "./helpers";
+import {
+  containsOnlyNumbers,
+  hasErrors,
+  isFutureDate,
+  isValidDate,
+} from "./helpers";
+
+interface PaymentFormProps {
+  onSuccess: (message: string) => void;
+}
 
 const defaultValues = {
   name: "",
@@ -10,7 +19,7 @@ const defaultValues = {
   expDate: "",
 };
 
-export const PaymentForm = () => {
+export const PaymentForm = ({ onSuccess }: PaymentFormProps) => {
   const [formValues, setFormValues] = useState(defaultValues);
   const [errors, setErrors] = useState(defaultValues);
 
@@ -84,14 +93,13 @@ export const PaymentForm = () => {
         expDate: "Please enter a date in the future",
       }));
     }
+
     if (!isValidDate(expDate)) {
       setErrors((prev) => ({
         ...prev,
         expDate: "Please enter a valid date in MM/YY format",
       }));
     }
-
-    console.log(errors);
   };
 
   const handleSubmit = (event: SyntheticEvent) => {
@@ -99,6 +107,11 @@ export const PaymentForm = () => {
     console.log(formValues);
     setErrors(defaultValues);
     validate();
+
+    if (!hasErrors(errors)) {
+      console.log("success line");
+      onSuccess("Congrats! You have successfully booked tickets!");
+    }
   };
 
   return (

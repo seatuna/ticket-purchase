@@ -9,22 +9,29 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Event, events } from "./mockData.ts";
+import { Event, events, processingFee } from "./mockData.ts";
 import { PaymentForm } from "./PaymentForm.tsx";
 
 export const Checkout = () => {
   const { eventId } = useParams();
   const [quantity, setQuantity] = useState(1);
   const event = events.find((event: Event) => event.id === eventId);
+  const [success, setSuccess] = useState<string>();
 
   if (!event) {
     return <h1>An Error Has Occurred</h1>;
   }
 
+  const fees = (quantity * processingFee).toFixed(2);
+  const totalCost = (Number(event.price) * quantity + Number(fees)).toFixed(2);
+
   return (
     <>
       <Typography variant="h3" textAlign="center">
         Checkout
+      </Typography>
+      <Typography variant="h3" textAlign="center">
+        {success}
       </Typography>
       <Grid container spacing={4}>
         <Grid item sm={12} textAlign="center">
@@ -47,7 +54,7 @@ export const Checkout = () => {
           }}
         >
           <Typography variant="h5">Payment Details</Typography>
-          <PaymentForm />
+          <PaymentForm onSuccess={setSuccess} />
         </Grid>
         <Grid
           item
@@ -70,7 +77,7 @@ export const Checkout = () => {
                 <MenuItem value={1}>1</MenuItem>
                 <MenuItem value={2}>2</MenuItem>
                 <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>5</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
                 <MenuItem value={5}>5</MenuItem>
               </Select>
             </Box>
@@ -78,9 +85,14 @@ export const Checkout = () => {
               x {event.price.toFixed(2)}
             </Typography>
           </Box>
+          <Typography variant="body2" alignSelf="flex-end" padding={1}>
+            {`+ $${fees} ($${processingFee.toFixed(
+              2
+            )} x ${quantity}) processing fee`}
+          </Typography>
           <Box sx={{ marginTop: "15px" }}>
             <Typography variant="h2" padding={2} textAlign="right">
-              ${(Number(event.price) * quantity).toFixed(2)}
+              ${totalCost}
             </Typography>
             <Button
               variant="contained"

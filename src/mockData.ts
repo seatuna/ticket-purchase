@@ -1,3 +1,5 @@
+export const processingFee = 4.00;
+
 export interface Event {
   artist: string;
   description: string;
